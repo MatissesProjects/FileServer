@@ -1,8 +1,13 @@
 from flask import Flask
-import flask 
+import flask
+from os import listdir
 app = Flask(__name__)
 
 basePath="~/outputfiles/"
+
+@app.get("/")
+async def getFiles():
+    return listdir(basePath+ "images/")
 
 @app.get("/output/createImage/<int:fileNumber>")
 async def outputImage(fileNumber):
