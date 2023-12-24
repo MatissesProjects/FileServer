@@ -3,6 +3,12 @@ app = Flask(__name__)
 
 basePath="/home/matisse/outputfiles/"
 
+
+# @app.get("/output/<str:workflow>/<int:fileNumber>/<str:extension>")
+# async def outputFile(workflow, fileNumber, extension):
+#     filename = f'{fileNumber}.{extension}' # need a way to know the file type
+#     return send_from_directory(basePath + f"{workflow}/", filename)
+
 @app.get("/output/createImage/<int:fileNumber>")
 async def outputImage(fileNumber):
     filename = f'{fileNumber}.png'
@@ -21,9 +27,11 @@ async def uploadImage():
         return Response(response=f'need to supply a file name', status=502)
 
     print("success")
-    filePath = f'{basePath}images/{file.filename}.png'
+    filePath = f'{basePath}images/{file.filename}'
     print(f"saving to {filePath}")
-    await file.save(filePath)
+    file.save(filePath)
     return Response(response=f'success', status=200)
 
 app.run("127.0.0.1", "5113")
+
+appKey = "makeUniqueForOurApp"
