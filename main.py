@@ -3,7 +3,7 @@ import flask
 from os import listdir
 app = Flask(__name__)
 
-basePath="~/outputfiles/"
+basePath="/home/matisse/outputfiles/"
 
 @app.get("/")
 async def getFiles():
