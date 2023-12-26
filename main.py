@@ -3,7 +3,7 @@ from flask import Flask, request, Response, send_from_directory
 app = Flask(__name__)
 
 basePath="/home/matisse/outputfiles/"
-conn = sqlite3.connect('userFileData.db')
+conn = sqlite3.connect('userFileData.db', check_same_thread=False)
 cursor = conn.cursor()
 # @app.get("/output/<str:workflow>/<int:fileNumber>/<str:extension>")
 # async def outputFile(workflow, fileNumber, extension):
