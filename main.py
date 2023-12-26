@@ -14,7 +14,7 @@ cursor = conn.cursor()
 #     return send_from_directory(basePath + f"{workflow}/", filename)
 # /home/matisse/outputfiles/366331361583169537/createImage/6480688717/6480688717.png
 @app.get("/output/createImage/<int:userid>/<int:jobId>/<int:fileNumber>")
-@cross_origin()
+# @cross_origin()
 def outputImage(userid,jobId,fileNumber):
     filename = f'{fileNumber}.png'
     return send_from_directory(f"{basePath}{userid}/createImage/{jobId}", filename)
