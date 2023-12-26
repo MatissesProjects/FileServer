@@ -51,7 +51,6 @@ async def uploadImage():
 
     # # Commit changes and close the connection
     conn.commit()
-    conn.close()
     return Response(response=f'success', status=200)
 
 app.run("127.0.0.1", "5113")
