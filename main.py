@@ -19,6 +19,12 @@ def outputImage(userid,jobId,fileNumber):
     filename = f'{fileNumber}.png'
     return send_from_directory(f"{basePath}{userid}/createImage/{jobId}", filename)
 
+@app.route("/output/rethemeImage/<int:userid>/<int:jobId>/<int:fileNumber>", methods=["GET"])
+@cross_origin()
+def rethemeImage(userid,jobId,fileNumber):
+    filename = f'{fileNumber}.png'
+    return send_from_directory(f"{basePath}{userid}/rethemeImage/{jobId}", filename)
+
 @app.post("/uploadImage")
 async def uploadImage():
     files = request.files
