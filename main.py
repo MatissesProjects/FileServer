@@ -25,7 +25,7 @@ def rethemeImage(userid,jobId,fileNumber):
     filename = f'{fileNumber}.png'
     return send_from_directory(f"{basePath}{userid}/rethemeImage/{jobId}", filename)
 
-@app.route("/output/<str:workflowName>/<int:userid>/<int:jobId>/<int:fileNumber>/<str:fileExtension>", methods=["GET"])
+@app.route("/output/<workflowName>/<int:userid>/<int:jobId>/<int:fileNumber>/<fileExtension>", methods=["GET"])
 @cross_origin()
 def getFile(workflowName,userid,jobId,fileNumber,fileExtension):
     filename = f'{fileNumber}.{fileExtension}'
