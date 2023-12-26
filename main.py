@@ -25,6 +25,12 @@ def rethemeImage(userid,jobId,fileNumber):
     filename = f'{fileNumber}.png'
     return send_from_directory(f"{basePath}{userid}/rethemeImage/{jobId}", filename)
 
+@app.route("/output/<str:workflowName>/<int:userid>/<int:jobId>/<int:fileNumber>/<str:fileExtension>", methods=["GET"])
+@cross_origin()
+def getFile(workflowName,userid,jobId,fileNumber,fileExtension):
+    filename = f'{fileNumber}.{fileExtension}'
+    return send_from_directory(f"{basePath}{userid}/{workflowName}/{jobId}", filename)
+
 @app.post("/uploadImage")
 async def uploadImage():
     files = request.files
@@ -39,8 +45,8 @@ async def uploadImage():
         print("no image file")
         return Response(response=f'need to supply a file name', status=502)
 
-    print("success")
     filePath = f'{basePath}{formData["discordId"]}/{formData["workflowName"]}/{formData["jobId"]}/{file.filename}'
+    print(filePath, "using the file path")
     directory = os.path.dirname(filePath)
 
     # Create the directory if it doesn't exist (do nothing if it exists)
