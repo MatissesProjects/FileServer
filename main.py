@@ -11,11 +11,11 @@ cursor = conn.cursor()
 # async def outputFile(workflow, fileNumber, extension):
 #     filename = f'{fileNumber}.{extension}' # need a way to know the file type
 #     return send_from_directory(basePath + f"{workflow}/", filename)
-
-@app.get("/output/createImage/<int:fileNumber>")
-async def outputImage(fileNumber):
+# /home/matisse/outputfiles/366331361583169537/createImage/6480688717/6480688717.png
+@app.get("/output/createImage/<int:userid>/<int:jobId>/<int:fileNumber>")
+async def outputImage(userid,jobId,fileNumber):
     filename = f'{fileNumber}.png'
-    return send_from_directory(basePath + "images/", filename)
+    return send_from_directory(f"{basePath}{userid}/createImage/{jobId}", filename)
 
 @app.post("/uploadImage")
 async def uploadImage():
