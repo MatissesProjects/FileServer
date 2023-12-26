@@ -1,5 +1,7 @@
 import sqlite3
 from flask import Flask, request, Response, send_from_directory
+import os
+
 app = Flask(__name__)
 
 basePath="/home/matisse/outputfiles/"
@@ -30,7 +32,11 @@ async def uploadImage():
         return Response(response=f'need to supply a file name', status=502)
 
     print("success")
-    filePath = f'{basePath}images/{file.filename}'
+    filePath = f'{basePath}{formData["discordId"]}/{formData["workflowName"]}/{file.filename}'
+    directory = os.path.dirname(filePath)
+
+    # Create the directory if it doesn't exist (do nothing if it exists)
+    os.makedirs(directory, exist_ok=True)
     print(f"saving to {filePath}")
     file.save(filePath)
 
