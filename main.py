@@ -18,7 +18,7 @@ async def outputImage(fileNumber):
 @app.post("/uploadImage")
 async def uploadImage():
     files = request.files
-    print(request.form)
+    formData = request.form
     # request.form in the form data check the api key
     print(files)
     if 'imageFile' not in files:
@@ -35,17 +35,13 @@ async def uploadImage():
     file.save(filePath)
 
     # TODO add to database that we have our new file for the user
-    # # Insert data into User table
-    # users_data = [('123456789', 'UserOne', 100), ('987654321', 'UserTwo', 150)]
-    # cursor.executemany('INSERT INTO User (discordId, discordName, tokens) VALUES (?, ?, ?)', users_data)
-
     # # Insert data into Jobs table
-    # jobs_data = [('WorkflowA', 1, '123456789'), ('WorkflowB', 2, '987654321'), ('WorkflowC', 3, '123456789')]
-    # cursor.executemany('INSERT INTO Jobs (workflowName, jobId, discordID) VALUES (?, ?, ?)', jobs_data)
+    jobs_data = [(formData['workflowName'], formData['jobId'], formData['discordId'])]
+    cursor.execute('INSERT INTO Jobs (workflowName, jobId, discordID) VALUES (?, ?, ?)', jobs_data)
 
     # # Insert data into Outputs table
-    # outputs_data = [(1, '6878808662.png'), (2, '7392628832.png'), (2, '8071648859.png'), (2, '6029311345.png')]
-    # cursor.executemany('INSERT INTO Outputs (jobId, fileName) VALUES (?, ?)', outputs_data)
+    outputs_data = [(formData['jobId'], file.filename)]
+    cursor.execute('INSERT INTO Outputs (jobId, fileName) VALUES (?, ?)', outputs_data)
 
     # # Commit changes and close the connection
     # conn.commit()
