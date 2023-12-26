@@ -44,8 +44,8 @@ async def uploadImage():
     cursor.execute('INSERT INTO Outputs (jobId, fileName) VALUES (?, ?)', outputs_data)
 
     # # Commit changes and close the connection
-    # conn.commit()
-    # conn.close()
+    conn.commit()
+    conn.close()
     return Response(response=f'success', status=200)
 
 app.run("127.0.0.1", "5113")
