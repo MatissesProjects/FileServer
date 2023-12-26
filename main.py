@@ -32,7 +32,7 @@ async def uploadImage():
         return Response(response=f'need to supply a file name', status=502)
 
     print("success")
-    filePath = f'{basePath}{formData["discordId"]}/{formData["workflowName"]}/{file.filename}'
+    filePath = f'{basePath}{formData["discordId"]}/{formData["workflowName"]}/{formData["jobId"]}/{file.filename}'
     directory = os.path.dirname(filePath)
 
     # Create the directory if it doesn't exist (do nothing if it exists)
