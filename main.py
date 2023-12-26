@@ -36,11 +36,11 @@ async def uploadImage():
 
     # TODO add to database that we have our new file for the user
     # # Insert data into Jobs table
-    jobs_data = [(formData['workflowName'], formData['jobId'], formData['discordId'])]
+    jobs_data = (formData['workflowName'], formData['jobId'], formData['discordId'])
     cursor.execute('INSERT INTO Jobs (workflowName, jobId, discordID) VALUES (?, ?, ?)', jobs_data)
 
     # # Insert data into Outputs table
-    outputs_data = [(formData['jobId'], file.filename)]
+    outputs_data = (formData['jobId'], file.filename)
     cursor.execute('INSERT INTO Outputs (jobId, fileName) VALUES (?, ?)', outputs_data)
 
     # # Commit changes and close the connection
