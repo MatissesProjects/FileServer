@@ -8,11 +8,7 @@ app = Flask(__name__)
 basePath="/home/matisse/outputfiles/"
 conn = sqlite3.connect('userFileData.db', check_same_thread=False)
 cursor = conn.cursor()
-# @app.get("/output/<str:workflow>/<int:fileNumber>/<str:extension>")
-# async def outputFile(workflow, fileNumber, extension):
-#     filename = f'{fileNumber}.{extension}' # need a way to know the file type
-#     return send_from_directory(basePath + f"{workflow}/", filename)
-# /home/matisse/outputfiles/366331361583169537/createImage/6480688717/6480688717.png
+
 @app.route("/output/createImage/<int:userid>/<int:jobId>/<int:fileNumber>", methods=["GET"])
 @cross_origin()
 def outputImage(userid,jobId,fileNumber):
@@ -30,6 +26,15 @@ def rethemeImage(userid,jobId,fileNumber):
 def getFile(workflowName,userid,jobId,fileNumber,fileExtension):
     filename = f'{fileNumber}.{fileExtension}'
     return send_from_directory(f"{basePath}{userid}/{workflowName}/{jobId}", filename)
+
+# user twitch Id (username?)
+@app.post("/createUser")
+def createUser():
+    formData = request.form
+    outputs_data = (formData['discordId'], formData['discordName'], 100)
+    cursor.execute('INSERT OR IGNORE INTO User (discordId, discordName, tokens) VALUES (?, ?, ?)', outputs_data)
+    conn.commit()
+
 
 @app.post("/uploadImage")
 async def uploadImage():
