@@ -2,6 +2,7 @@ import sqlite3
 from flask import Flask, request, Response, send_from_directory
 from flask_cors import cross_origin
 import os
+import json
 
 app = Flask(__name__)
 
@@ -35,6 +36,21 @@ def createUser():
     cursor.execute('INSERT OR IGNORE INTO User (discordId, discordName, tokens) VALUES (?, ?, ?)', outputs_data)
     conn.commit()
     return Response(response=f'success', status=200)
+
+@app.get("/getUser/<userId>")
+def getUser(userId):
+    cursor.execute(f'''SELECT u.discordName, u.discordId, o.fileName, j.jobId
+                      FROM (SELECT * FROM User WHERE discordId = '?') AS u
+                      JOIN Jobs AS j ON u.discordId = j.discordId
+                      JOIN Outputs AS o ON j.jobId = o.jobId;''', (userId))
+    # Fetch all results
+    results = cursor.fetchall()
+    # Print the results
+    for row in results:
+        print(row)
+    # Close the connection
+    conn.close()
+    return Response(response=json.dumps(results), status=200)
 
 @app.post("/uploadImage")
 async def uploadImage():
