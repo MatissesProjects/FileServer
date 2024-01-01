@@ -49,8 +49,6 @@ def getUser(userId):
     # Print the results
     for row in results:
         print(row)
-    # Close the connection
-    conn.close()
     return Response(response=json.dumps(results), status=200)
 
 @app.post("/uploadImage")
