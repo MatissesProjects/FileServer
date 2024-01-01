@@ -35,11 +35,12 @@ def createUser():
     outputs_data = (formData['discordId'], formData['discordName'], 100)
     cursor.execute('INSERT OR IGNORE INTO User (discordId, discordName, tokens) VALUES (?, ?, ?)', outputs_data)
     conn.commit()
-    return Response(response=f'success', status=200)
+    cursor.execute('SELECT tokens FROM User where discordId = ?', (formData['discordId']))
+    return Response(response=f'{cursor.fetchall()}', status=200)
 
 @app.get("/getUser/<userId>")
 def getUser(userId):
-    cursor.execute(f'''SELECT u.discordName, u.discordId, o.fileName, j.jobId
+    cursor.execute('''SELECT u.discordName, u.discordId, o.fileName, j.jobId
                       FROM (SELECT * FROM User WHERE discordId = '?') AS u
                       JOIN Jobs AS j ON u.discordId = j.discordId
                       JOIN Outputs AS o ON j.jobId = o.jobId;''', (userId))
