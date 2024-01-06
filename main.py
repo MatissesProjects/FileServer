@@ -40,7 +40,9 @@ def createUser():
 
 @app.get("/getUser/<userId>")
 def getUser(userId):
-    cursor.execute('''SELECT workflowName, u.discordId, j.jobId, o.fileName
+    cursor.execute('''SELECT  workflowName, u.discordId, j.jobId,
+                              substr(o.fileName, 0,instr(o.fileName, '.')) as filename,
+                              substr(o.fileName, instr(o.fileName, '.')+1) as extension
                       FROM (SELECT * FROM User WHERE discordId = ?) AS u
                       JOIN Jobs AS j ON u.discordId = j.discordId
                       JOIN Outputs AS o ON j.jobId = o.jobId;''', (userId,))
