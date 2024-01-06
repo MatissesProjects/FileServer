@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask, request, Response, send_from_directory
+from flask import Flask, request, Response, send_from_directory, jsonify
 from flask_cors import cross_origin
 import os
 import json
@@ -53,7 +53,7 @@ def getUser(userId):
     data = []
     for row in results:
         data.append(f"{base}{row[0]}/{row[1]}/{row[2]}/{row[3]}/{row[4]}")
-    return Response(response=data, status=200)
+    return Response(response=jsonify(data), status=200)
 
 @app.post("/uploadImage")
 async def uploadImage():
