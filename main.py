@@ -49,9 +49,11 @@ def getUser(userId):
     # Fetch all results
     results = cursor.fetchall()
     # Print the results
+    base = "https://fileserver.matissetec.dev/output/"
+    data = []
     for row in results:
-        print(row)
-    return Response(response=json.dumps(results), status=200)
+        data += f"{base}{row[0]}/{row[1]}/{row[2]}/{row[3]}/{row[4]}"
+    return Response(response=data, status=200)
 
 @app.post("/uploadImage")
 async def uploadImage():
