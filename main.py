@@ -52,7 +52,7 @@ def getUser(userId):
     base = "https://fileserver.matissetec.dev/output/"
     data = []
     for row in results:
-        data += f"{base}{row[0]}/{row[1]}/{row[2]}/{row[3]}/{row[4]}"
+        data += [f"{base}{row[0]}/{row[1]}/{row[2]}/{row[3]}/{row[4]}"]
     return Response(response=data, status=200)
 
 @app.post("/uploadImage")
