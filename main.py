@@ -1,12 +1,17 @@
 from flask import Flask, request, Response, send_from_directory
 from utils.db_manager import getDB
+from utils.logger import get_logger
 from dotenv import load_dotenv
 from waitress import serve
 from flask_cors import cross_origin
-from flask_compress import Compress
 import os, secure
 
+
 load_dotenv()
+
+logger = get_logger()
+logger.info('Starting Fileserver...')
+
 app = Flask(__name__)
 production = eval(os.getenv("PRODUCTION"))
 basePath = os.getenv("BASE_PATH")
@@ -16,7 +21,6 @@ app.config.update(
     SECRET_KEY = os.urandom(64).hex()
 )
 
-Compress(app)
 secure_headers = secure.Secure()
 
 def send_file_from_directory(workflow_name, user_id, job_id, file_number, file_extension):
@@ -52,6 +56,7 @@ def createUser():
         cursor.execute('SELECT tokens FROM User where discordId = ?', (formData['discordId'],))
         return Response(response=f'{cursor.fetchall()}', status=200)
     except Exception as e:
+        logger.error(f'Error: {str(e)}')
         return Response(response=f'Error: {str(e)}', status=500)
 
 @app.get("/getUser/<userId>")
@@ -69,6 +74,7 @@ def getUser(userId):
         data = [f"{base}{row[0]}/{row[1]}/{row[2]}/{row[3]}/{row[4]}" for row in results]
         return data
     except Exception as e:
+        logger.error(f'Error: {str(e)}')
         return Response(response=f'Error: {str(e)}', status=500)
 
 @app.post("/uploadImage")
@@ -108,6 +114,7 @@ async def uploadImage():
         conn.commit()
         return Response(response=f'success', status=200)
     except Exception as e:
+        logger.error(f'Error: {str(e)}')
         return Response(response=f'Error: {str(e)}', status=500)
 
 @app.errorhandler(404)
@@ -123,8 +130,10 @@ if __name__ == "__main__":
     appKey = 'makeUniqueForOurApp'
     #appKey = os.getenv("APP_KEY")
     if production:
+        logger.info('Starting server in production mode...')
         print('Starting production server on port 5113. At http://127.0.0.1:5113/')
         serve(app, host='127.0.0.1', port=5113)
     else:
+        logger.info('Starting server in default (local) mode...')
         app.config['SERVER_NAME'] = '127.0.0.1:5113'
         app.run(port=5113)

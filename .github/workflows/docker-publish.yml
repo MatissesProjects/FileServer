@@ -1,0 +1,41 @@
+name: Build the fileserver image and push it to GitHub Container Registry
+
+on:
+  push:
+
+jobs:
+  publish-fileserver-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: lowercase_owner_name
+        uses: ASzc/change-string-case-action@v5
+        with:
+          string: ${{ github.actor }}
+
+      - id: lowercase_repo_name
+        uses: ASzc/change-string-case-action@v5
+        with:
+          string: ${{ github.event.repository.name }}
+
+      - name: Build image
+        run: |
+          docker build . --tag ghcr.io/${{ steps.lowercase_owner_name.outputs.lowercase }}/${{ steps.lowercase_repo_name.outputs.lowercase }}:latest
+          docker push ghcr.io/${{ steps.lowercase_owner_name.outputs.lowercase }}/${{ steps.lowercase_repo_name.outputs.lowercase }}:latest
+
+      - name: Delete old package versions
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: ${{ steps.lowercase_repo_name.outputs.lowercase }}
+          package-type: 'container'
+          min-versions-to-keep: 3

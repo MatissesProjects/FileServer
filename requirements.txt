@@ -3,4 +3,3 @@ flask
 python-dotenv
 secure
 waitress
-flask_compress
