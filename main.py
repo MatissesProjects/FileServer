@@ -6,7 +6,6 @@ from waitress import serve
 from flask_cors import cross_origin
 import os, secure
 
-
 load_dotenv()
 
 logger = get_logger()
