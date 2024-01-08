@@ -1,0 +1,6 @@
+flask_cors
+flask
+python-dotenv
+secure
+waitress
+flask_compress
