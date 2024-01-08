@@ -1,0 +1,5 @@
+flask_cors
+flask
+python-dotenv
+secure
+waitress
